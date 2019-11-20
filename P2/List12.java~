@@ -1,0 +1,402 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 4/22/13
+*
+* Assignment #: 2
+**/
+
+/**
+* This assignment implements 9 out of the 25 methods in List<E>
+*
+* @see java.util.List<>
+**/
+
+import java.util.*;
+
+public class List12<E> implements List<E>
+{
+	protected int size;	// Size of the list
+	protected SLNode<E> head;	// Head pointer
+	/**
+	* No argument constructor
+	**/
+	public List12()
+	{
+		//super();
+		size = 0; // A list always starts empty
+	}
+	/**
+	* This is the Singly List Node class to create new node for the list
+	**/
+	public class SLNode<E>
+	{
+		private E data;	// Nodes element value
+		private SLNode<E> next;	// Nodes next pointer
+		/**
+		* No argument constructor
+		**/
+		public SLNode()
+		{
+			this.data = null;
+			this.next = null;
+		}
+		/**
+		* Singly List Constructor
+		*
+		* @param data
+		* @param next
+		**/
+		public SLNode(E data, SLNode<E> next)
+		{
+			this.data = data;
+			this.next = next;
+		}
+		/**
+		* Singly List pointer accessor method
+		*
+		* @return SLNode<E>
+		**/
+		public SLNode<E> getSuccessor()
+		{
+			return this.next;
+		}
+		/**
+		* Singly List pointer mutator method
+		*
+		* @param n
+		**/
+		public void setSuccessor(SLNode<E> n)
+		{
+			this.next = n;
+		}
+		/**
+		* Singly List element accessor method
+		*
+		* @return E
+		**/
+		public E getData()
+		{
+			return this.data;
+		}
+		/**
+		* Singly List elemtnt mutator method
+		*
+		* @param d
+		* @return E
+		**/
+		public E setData(E d)
+		{
+			return this.data = d;
+		}
+	}
+	/**
+	* Class to implement the Iterator<E> method
+	**/
+	private class Iter implements Iterator<E>
+	{
+		protected SLNode<E> next; // The Node next to be visited
+		protected SLNode<E> lastReturned; // The Node last visited
+		protected SLNode<E> pred; // the predecessor of last returned
+		/**
+		* No argument constructor
+		**/
+		Iter() // Initialize
+		{
+			next = head.getSuccessor();
+			lastReturned = null;
+			pred = null;
+		}
+		/**
+		* Next() method for Iterator
+		*
+		* @return E
+		**/
+		public E next()
+		{
+			if(this.next == null)
+				throw new NoSuchElementException();
+			pred = lastReturned;
+			lastReturned = next;
+			next = next.getSuccessor();
+			return lastReturned.getData();
+		}
+		/**
+		* HasNext() method for Iterator
+		*
+		* @return boolean
+		**/
+		public boolean hasNext()
+		{
+			return next != null;
+		}
+		/**
+		* Remove() method for Iterator
+		**/
+		public void remove()
+		{
+			if(lastReturned == null)
+				throw new IllegalStateException();
+			pred = lastReturned.getSuccessor();
+			//next = next.getSuccessor();
+			lastReturned = null;
+			size--;
+		}
+	}
+	/**
+	* add(E) method that uses software reuse
+	*
+	* @param E
+	* @return boolean
+	**/
+	public boolean add(E o)
+	{
+		add(size, o);
+		return true;
+	}
+	/**
+	* add(int, E) method that adds a node to the specified index
+	*
+	* @param index
+	* @param element
+	**/
+	public void add(int index, E element)
+	{
+		if(index < 0 || index > size)
+			throw new IndexOutOfBoundsException();
+		//SLNode<E> newnode = new SLNode<E>(element, null);
+		else if(index == 0)
+		{
+			if (index == size)
+			{
+				SLNode<E> newnode = new SLNode<E>(element, null);
+				head = newnode;
+			}
+			else
+			{
+				SLNode<E> cursor = head;
+				SLNode<E> newnode = new SLNode<E>(element, null);
+				newnode.setSuccessor(cursor.getSuccessor());
+				cursor = newnode;
+			}
+		}
+		else if (index == size)
+		{
+			SLNode<E> cursor = head;
+			for(int i = 1; i < index; i++)
+				cursor = cursor.getSuccessor();
+			SLNode<E> newnode = new SLNode<E>(element, null);
+			//newnode.setSuccessor(cursor.getSuccessor());
+			cursor = newnode;
+		}
+		else
+		{
+			SLNode<E> cursor = head;
+			for(int i = 0; i < index; i++)
+				cursor = cursor.getSuccessor();
+			SLNode<E> newnode = new SLNode<E>(element, null);
+			newnode.setSuccessor(cursor.getSuccessor());
+			cursor = newnode;
+		}
+		size++;
+	}
+	/**
+	* Contains(Object)
+	*
+	* @param Object
+	* @return boolean
+	**/
+	public boolean contains(Object o)
+	{
+		SLNode<E> n = head;
+		if(size == 0)
+			return false;
+		for(int i = 0; i < size; i++)
+		{
+			if(o.equals(n.getData()))
+				return true;
+			n = n.getSuccessor();
+		}
+		return false;
+	}
+	/**
+	* get(int) method to access the element in the node
+	*
+	* @param index
+	* @return E
+	**/
+	public E get(int index)
+	{
+		if(index < 0 || index >= size)
+			throw new IndexOutOfBoundsException();
+		else
+		{
+			SLNode<E> cursor = head;
+			for(int i = 0; i < index; i++)
+				cursor = cursor.getSuccessor();
+			return cursor.getData();
+		}
+	}
+	/**
+	* Iterator() method that calls the Iter() class
+	*
+	* @return Iterator<E>
+	**/
+	public Iterator<E> iterator()
+	{
+		return new Iter();
+	}
+	/**
+	* Remove(Object) method that removes the specified object
+	*
+	* @param o
+	* @return boolean
+	**/
+	public boolean remove(Object o)
+	{
+		if(size == 0)
+			return false;
+		else if (size > 1)
+		{
+			SLNode<E> cursor = head;
+			SLNode<E> target = cursor.getSuccessor();
+			for(int i = 0; i < size; i++)
+			{
+				if(o.equals(cursor.getData()))
+				{
+					cursor.setSuccessor(target);
+					size--;
+					return true;
+				}
+				else if(o.equals(target.getData()))
+				{
+					if(target.getSuccessor() == null)
+					{
+						cursor.setSuccessor(null);
+					}
+					else
+					{
+						cursor.setSuccessor(target.getSuccessor());
+						target.setSuccessor(null);
+					}
+					size--;
+					return true;
+				}
+				cursor = target;
+				target.setSuccessor(cursor.getSuccessor());
+			}
+		}
+		return false;
+	}
+	/**
+	* Remove(int) method that removes the node at the specified index
+	*
+	* @param index
+	* @return E
+	**/
+	public E remove(int index)
+	{
+		if(index < 0 || index > size)
+			throw new IndexOutOfBoundsException();
+		SLNode<E> cursor = head;
+		while(--index > 1)
+			cursor = cursor.getSuccessor();
+		SLNode<E> target = cursor.getSuccessor();
+		E element = target.getData();
+		cursor.setSuccessor(target.getSuccessor());
+		size--;
+		return element;
+	}
+	/**
+	* Set(int, E) method that mutates the element at the specified index
+	*
+	* @param index
+	* @param element
+	* @return E
+	**/
+	public E set(int index, E element)
+	{
+		if(index < 0 || index > size)
+			throw new IndexOutOfBoundsException();
+		SLNode<E> cursor = head;
+		while(--index > 0)
+			cursor = cursor.getSuccessor();
+		E e = cursor.setData(element);
+		return e;
+	}
+	/**
+	* Size() methoed that returns the size of the list
+	*
+	* @return int
+	**/
+	public int size()
+	{
+		return size;
+	}
+	/**
+	* Methods that we require to have in this implementation
+	**/
+	public boolean addAll(Collection<? extends E> c)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public boolean addAll(int index, Collection<? extends E> c)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public void clear()
+	{
+		throw new UnsupportedOperationException();
+	}
+	public boolean containsAll(Collection<?> c)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public boolean equals(Object o)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public int hashCode()
+	{
+		throw new UnsupportedOperationException();
+	}
+	public int indexOf(Object o)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public boolean isEmpty()
+	{
+		throw new UnsupportedOperationException();
+	}
+	public int lastIndexOf(Object o)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public ListIterator<E> listIterator()
+	{
+		throw new UnsupportedOperationException();
+	}
+	public ListIterator<E> listIterator(int index)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public boolean removeAll(Collection<?> c)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public boolean retainAll(Collection<?> c)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public List<E> subList(int fromIndex, int toIndex)
+	{
+		throw new UnsupportedOperationException();
+	}
+	public Object[] toArray()
+	{
+		throw new UnsupportedOperationException();
+	}
+	public <T> T[] toArray(T[] a)
+	{
+		throw new UnsupportedOperationException();
+	}
+}

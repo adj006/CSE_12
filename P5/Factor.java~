@@ -1,0 +1,51 @@
+public class Factor extends ASTNode
+{
+	private Factor(ASTNode n)
+	{
+		super(n);
+	}
+	public static Factor parse(java.lang.String s)
+	{
+		s.trim();
+		//System.err.println("Factor: " + s);
+		if((s == null) || (s.length() == 0))
+			return null;
+		else if(Const.parse(s) != null)
+		{
+			return new Factor(Const.parse(s));
+		}
+		else if(Ident.parse(s) != null)
+		{
+			return new Factor(Ident.parse(s));
+		}
+		else if((s.indexOf("(") == -1) || (s.indexOf(")") == -1))
+		{
+			System.out.println("FactorElseIf: " + s);
+			return null;
+		}
+		else if(s.lastIndexOf("(") < s.indexOf(")"))
+		{
+			s.substring(s.indexOf("("), s.lastIndexOf(")"));
+			s.trim();
+			System.out.println("Factor(): " + s);
+			if(Expr.parse(s) != null)
+			{
+				return new Factor(Expr.parse(s));
+			}
+		}
+		else if(s.lastIndexOf("(") > s.indexOf(")"))
+		{
+			s.substring(s.indexOf("("), s.indexOf(")"));
+			s.trim();
+			if(Expr.parse(s) != null)
+			{
+				return new Factor(Expr.parse(s));
+			}
+		}
+		return null;
+	}
+	public double eval(java.util.Map<java.lang.String, java.lang.Double> symtab)
+	{
+		return getChild(0).eval(symtab);
+	}
+}

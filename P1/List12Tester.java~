@@ -1,0 +1,456 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 4/11/13
+*
+* Assignment #: 1
+**/
+
+/**
+* This program is to test for good and bad implimentation of a specified
+* file. it will pass for good implimentation and fail for bad implimentation
+**/
+
+import java.util.*;
+import javax.swing.*;
+
+/**
+* Require this hierarchy in order to use JUnit to do the unit testing
+* for the implimentation.
+*
+* @see junit.framework.TestCase
+**/
+public class List12Tester extends junit.framework.TestCase
+{
+	/**
+	* Main method is the driver of this program
+	*
+	* @see java.util.List<>
+	**/	
+	public static void main(String args[])
+	{
+		// Require this to run the JUnit program as a GUI
+		junit.textui.TestRunner.main(new String[] {"List12Tester"});
+	}
+	/**
+	* This method test whether the add(E o) methods is being implimented
+	* correctly by checking if it is passing the correct value and storing
+	* it in the right location in memory and testing whether it is returning
+	* the correct boolean value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testAddE()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for (int i = 0; i <= 1000; i++)
+		{
+			assertTrue(myList.add(i));
+			assertTrue(myList.get(i) == i);
+		}
+	}
+	/**
+	* Method to test the add(int index, E element) method to ensure it is
+	* working properly by making sure the method is storing the right value
+	* in memory in the correct sequential order with the specified value
+	* 
+	*
+	* @see java.util.List<>
+	**/
+	public void testAddIntE()
+	{
+		List<Integer> myList = new List12<Integer>();
+		myList.add(1);
+		myList.add(2);
+		myList.add(3);
+		myList.add(2, 1);
+		assertTrue(myList.get(0) == 1);
+		assertTrue(myList.get(1) == 2);
+		System.out.println(MyList.get(1));
+		assertTrue(myList.get(2) == 1);
+		assertTrue(myList.get(3) == 3);
+		assertFalse(myList.get(2) == 3);
+	}
+	/**
+	* Method to test for the exceptions in the add metheod for cases 
+	* with a negative index.
+	*
+	* @see java.util.List<>
+	**/
+	public void testAddIntEException()
+	{
+		List<Integer> myList = new List12<Integer>();
+		try
+		{
+			myList.add(-1, 5);
+			fail("Index out of bounds");
+		}
+		catch(IndexOutOfBoundsException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch(Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+	}
+	/**
+	* Method for testing the contains(Object o) method by checking if
+	* it's passing the right parameters and storing the correct value
+	* in memory. Also checks if the right boolean is returned.
+	*
+	* @see java.util.List<>
+	**/
+	public void testContainsObject()
+	{
+		List<String> myList = new List12<String>();
+		myList.add("C");
+		myList.add("S");
+		myList.add("E");
+		assertTrue(myList.contains("C"));
+		assertTrue(myList.contains("S"));
+		assertTrue(myList.contains("E"));
+		assertFalse(myList.contains("A"));
+	}
+	/**
+	* Method to test for the get(int index) method by checking if the correct
+	* parameter is stored in memery and checking if it's returning the 
+	* correct value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testGetInt()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for(int i = 0; i < 1000; i++)
+		{
+			myList.add(i);
+			assertEquals(myList.get(i), new Integer(i));
+		}
+	}
+	/**
+	* This method test for Exceptions on cases like a negative value and
+	* index out of bounds. 
+	*
+	* @see java.util.List<>
+	**/
+	public void testGetIntException()
+	{
+		List<Integer> myList = new List12<Integer>();
+		try
+		{
+			myList.add(1);
+			myList.get(-1);
+			fail("Index out of bounds");
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch (Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+		try
+		{
+			myList.add(1);
+			myList.get(2);
+			fail("Index out of bounds");
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch (Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+	}
+	/**
+	* Method to test the iterator().hasNext() method by testing if 
+	* it is returning the right boolean value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testIteratorHasNext()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for(int j = 0; j < 1000; j++)
+		{
+			myList.add(j);
+		}
+		Iterator<Integer> i = myList.iterator();
+		for(int j = 0; j < 1000; j++)
+		{
+			assertTrue(i.hasNext());
+		}
+	}
+	/**
+	* Method to test the iterator().next() method by checking if it is
+	* storing the right value in memory and reruning the correct value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testIteratorNext()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for(int j = 0; j < 1000; j++)
+		{
+			myList.add(j);
+		}
+		Iterator<Integer> i = myList.iterator();
+		for(int j = 0; j < 1000; j++)
+		{
+			assertTrue(i.next() == j);
+		}
+	}
+	/**
+	* Method to test the iterator().remove() method by checking if it's
+	* removing the right value and returning it.
+	*
+	* @see java.util.List<>
+	**/
+	public void testIteratorRemove()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for(int j = 0; j < 1000; j++)
+		{
+			myList.add(j);
+		}
+		Iterator<Integer> i = myList.iterator();
+		for(int j = 0; j < 500; j++)
+		{
+			i.next();
+		}
+		i.remove();
+		for(int j = 0 ; j < 499; j++)
+		{
+			assertTrue(myList.get(j) == j);
+		}
+		for(int j = 499 ; j < 999; j++)
+		{
+			assertTrue(myList.get(j) == j + 1);
+		}
+		assertFalse(myList.get(499) == 499);
+	}
+	/**
+	* Method to test for the exceptions for cases if doesn't contain the
+	* next value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testIteratorNextException()
+	{
+		List<Integer> myList = new List12<Integer>();
+		try
+		{
+			for(int j = 0; j < 500; j++)
+			{
+				myList.add(j);
+			}
+			Iterator<Integer> i = myList.iterator();
+			for(int j = 0; j < 500; j++)
+			{
+				assertTrue(i.next() == j);
+			}
+			i.next();
+			fail("No Such Element");
+		}
+		catch(NoSuchElementException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch(Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+	}
+	/**
+	* Method to test for cases like empty list, using remove() twice, and
+	* using the remove() without the next() method.
+	*
+	* @see java.util.List<>
+	**/
+	public void testIteratorRemoveException()
+	{
+		try
+		{
+			List<Integer> myList = new List12<Integer>();
+			Iterator<Integer> i = myList.iterator();
+			i.remove();
+			fail("Illegal State");
+		}
+		catch(IllegalStateException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch(Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+		try
+		{
+			List<Integer> myList = new List12<Integer>();
+			myList.add(1);
+			Iterator<Integer> i = myList.iterator();
+			i.next();
+			i.remove();
+			i.remove();
+			fail("Cannot remove");
+		}
+		catch(IllegalStateException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch(Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+		try
+		{
+			List<Integer> myList = new List12<Integer>();
+			myList.add(1);
+			Iterator<Integer> i = myList.iterator();
+			i.remove();
+			fail("Cannot remove");
+		}
+		catch(IllegalStateException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch(Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+	}
+	/**
+	* Method to test the remove(Object o) method by checking if it's removing
+	* the correct object and returning the right boolean value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testRemoveObject()
+	{
+		List<String> myList = new List12<String>();
+		myList.add("A");
+		myList.add("B");
+		assertTrue(myList.remove("A"));
+		assertTrue(myList.get(0) == "B");
+		assertFalse(myList.get(0) == "A");
+	}
+	/**
+	* Method to test the remove(int index) method by checking if it's
+	* removing the right value in memory.
+	*
+	* @see java.util.List<>
+	**/
+	public void testRemoveInt()
+	{
+		List<Integer> myList = new List12<Integer>();
+		myList.add(1);
+		myList.add(2);
+		assertTrue(myList.remove(0) == 1);
+		assertTrue(myList.get(0) == 2);
+		assertFalse(myList.get(0) == 1);
+		//assertFalse(myList.get(1) == 2);
+		assertTrue(myList.size() == 1);
+		assertFalse(myList.size() == 2);
+	}
+	/**
+	* Test for cases like index out of bounds.
+	*
+	* @see java.util.List<>
+	**/
+	public void testRemoveIntException()
+	{
+		try
+		{
+			List<Integer> myList = new List12<Integer>();
+			myList.add(1);
+			myList.add(2);
+			myList.remove(2);
+			fail("Index out of bounds");
+		}
+		catch(IndexOutOfBoundsException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch (Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+	}
+	/**
+	* Method to test the set(int index, E element) by checking if it
+	* storing the correct value in memory and returning the correct value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testSet()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for(int i = 0; i < 1000; i++)
+		{
+			myList.add(i);
+		}
+		assertTrue(myList.set(500, 12) == 500);
+		assertTrue(myList.get(500) == 12);
+	}
+	/**
+	* Test for cases like index out of bounds.
+	*
+	* @see java.util.List<>
+	**/
+	public void testSetException()
+	{
+		try
+		{
+			List<Integer> myList = new List12<Integer>();
+			myList.add(1);
+			myList.set(-1, 2);
+			fail("Index out of bounds");
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch (Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+		try
+		{
+			List<Integer> myList = new List12<Integer>();
+			myList.add(1);
+			myList.set(1, 2);
+			fail("Index out of bounds");
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			//if throws, catch the exception and pass the test
+		}
+		catch (Exception e)
+		{
+			fail("Unexpected Exception");
+		}
+	}
+	/**
+	* Method to test for the size() method by checking if it stores the
+	* correct value in memory and returning the right value.
+	*
+	* @see java.util.List<>
+	**/
+	public void testSize()
+	{
+		List<Integer> myList = new List12<Integer>();
+		for(int i = 0; i < 1000; i++)
+		{
+			myList.add(i);
+		}
+		assertTrue(myList.size() == 1000);
+	}
+}
+/**
+* Declare out List12<E> class to use hierarchy from LinkedList.
+*
+* @see java.util.LinkedList<>
+**/

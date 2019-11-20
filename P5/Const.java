@@ -1,0 +1,64 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 5/30/13
+*
+* Assignment #: 5
+**/
+
+/**
+* This assignment extends the ASTNode class in order to use
+* the methods it contains
+**/
+public class Const extends ASTNode
+{
+	double val;	// Stores the double value of the parsed string
+	/**
+	* Private Const constructor that takes in a double value as an argument
+	*
+	* @param n
+	**/
+	private Const(double d)
+	{
+		val = d;
+	}
+	/**
+	* This is the static parse method that takes in a string and checks if the
+	* syntax is valid. If valid it returns an instance of the constructor, if
+	* not it returns null
+	*
+	* @param s
+	* @return Const
+	**/
+	public static Const parse(java.lang.String s)
+	{
+		if(s == null)
+			return null;
+		s = s.trim();
+		if(s.length() == 0)
+			return null;
+		double temp;
+		/**
+		* Try-Catch block to determine if the the string that is being
+		* passed is in fact a constant
+		**/
+		try
+		{
+		  temp = java.lang.Double.parseDouble(s);
+	  }
+		catch(NumberFormatException e)
+		{
+			return null;
+		}
+		return new Const(temp);
+	}
+	/**
+	* This is the eval() method that evaluates the node
+	*
+	* @param symtab
+	* @return double
+	**/
+	public double eval(java.util.Map<java.lang.String, java.lang.Double> symtab)
+	{
+		return val;
+	}
+}

@@ -1,0 +1,73 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 5/30/13
+*
+* Assignment #: 5
+**/
+
+/**
+* This assignment extends the ASTNode class in order to use
+* the methods it contains
+**/
+public class Ident extends ASTNode
+{
+	String val;	// Stores the string value
+	/**
+	* Private Ident constructor that takes in a string value as an argument
+	*
+	* @param n
+	**/
+	private Ident(String s)
+	{
+		val = s;
+	}
+	/**
+	* This is the static parse method that takes in a string and checks if the
+	* syntax is valid. If valid it returns an instance of the constructor, if
+	* not it returns null
+	*
+	* @param s
+	* @return Ident
+	**/
+	public static Ident parse(java.lang.String s)
+	{
+		if(s == null)
+			return null;
+		s = s.trim();
+		if(s.length() == 0)
+			return null;
+		if(!(Character.isJavaIdentifierStart(s.charAt(0))))
+			return null;
+		else if(s.length() != 0)
+		{
+			for(int i = 1; i < s.length(); i++)
+			{
+				s = s.trim();
+				if(!(Character.isJavaIdentifierPart(s.charAt(i))))
+					return null;
+			}
+		}
+		return new Ident(s);
+	}
+	/**
+	* This is the eval() method that evaluates the node
+	*
+	* @param symtab
+	* @return double
+	**/
+	public double eval(java.util.Map<java.lang.String, java.lang.Double> symtab)
+	{
+		if(symtab.get(val) == null)
+			throw new RuntimeException("UNINITIALIZED VARIABLE: " + val);
+		return symtab.get(val);
+	}
+	/**
+	* This is the toString() method that returns the specified string
+	*
+	* @return java.lang.String
+	**/
+	public java.lang.String toString()
+	{
+		return val;
+	}
+}

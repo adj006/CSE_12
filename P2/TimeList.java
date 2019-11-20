@@ -1,0 +1,92 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 4/22/13
+*
+* Assignment #: 2
+**/
+
+import java.util.*;
+import java.math.*;
+
+/**
+* This program calculated the time to add to the list
+**/
+
+public class TimeList
+{
+	public static void main(String args[])
+	{
+		double seconds; // time it takes in nanoseconds to complete one trial
+		double time;	// time it takes for R trials
+		double avgTime;	// average time
+		double timeSq;	// time squared
+		double avgTimeSq;	// average time squared
+		double stdDiv;	// standard diviation
+		long start = 0; // start time
+		long end = 0;	// end time
+		int R; // number of trials
+		if(args.length != 2)
+		{
+			System.out.println("Usage: java TimeList ListType LocationOfList");
+			System.exit(1);
+		}
+		for(int N = 2000; N <= 50000; N += 1000)
+		{
+			List<Integer> LinkList = new List12<Integer>();
+			List<Integer> ArrList = new ArrayList<Integer>();
+			//double exTime[] = new double[48];
+			seconds = 0.0;
+			time = 0.0;
+			avgTime = 0.0;
+			timeSq = 0.0;
+			avgTimeSq = 0.0;
+			stdDiv = 0.0;
+			R = 100000/N;
+			for(int i = 0; i < R; i++)
+			{
+				LinkList = new List12<Integer>();
+				ArrList = new ArrayList<Integer>();
+				if((args[0].equalsIgnoreCase("linked")) && 
+					(args[1].equalsIgnoreCase("front")))
+				{
+				System.gc();	// resets time to zero
+				start = System.nanoTime();	
+					for(int j = 0; j < N; j++)
+						LinkList.add(0, 1);
+				}
+				else if((args[0].equalsIgnoreCase("array")) && 
+					(args[1].equalsIgnoreCase("front")))
+				{
+				System.gc();	// resets time to zero
+				start = System.nanoTime();	
+					for(int j = 0; j < N; j++)
+						ArrList.add(0, 1);
+				}
+				else if((args[0].equalsIgnoreCase("linked")) && 
+					(args[1].equalsIgnoreCase("back")))
+				{
+				System.gc();	// resets time to zero
+				start = System.nanoTime();	
+					for(int j = 0; j < N; j++)
+						LinkList.add(j, 1);
+				}
+				else if((args[0].equalsIgnoreCase("array")) && 
+					(args[1].equalsIgnoreCase("back")))
+				{
+				System.gc();	// resets time to zero
+				start = System.nanoTime();	
+					for(int j = 0; j < N; j++)
+						ArrList.add(j, 1);
+				}
+				end = System.nanoTime();
+				seconds = (double)(end - start) / (double)1.0e9;
+				time += seconds;
+				timeSq += Math.pow(seconds, 2);
+			}
+			avgTime = time / R;
+			avgTimeSq = timeSq / R;
+			stdDiv = Math.pow(avgTimeSq - Math.pow(avgTime, 2), 0.5);
+			System.out.format("%d \t %.6f \t %.6f \n", N, avgTime, stdDiv);
+		}
+	}
+}

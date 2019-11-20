@@ -1,0 +1,252 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 5/14/13
+*
+* Assignment #: 4
+**/
+
+/**
+* This assignment Implements the PQueue<E> interface in order to use
+* the methods it contains
+**/
+
+public class Heap12<E extends Comparable<? super E>> implements PQueue<E>
+{
+	private int size;	// The amount of data elements it is currently holding
+	private int cap;	// The maximum amount of data elements it can hold
+	private E[] arr;	// Array to store values for our heap
+	/**
+	* This is the no argument constructor that initializes the capacity to 5
+	**/
+	public Heap12()
+	{
+		size = 0;
+		cap = 5;
+		arr = (E[])(new Comparable[cap]);
+	}
+	/**
+	* This is the constructor that makes a deep copy of the existing Heap12
+	*
+	* @param existing
+	**/
+	public Heap12(Heap12<E> existing)
+	{
+		size = existing.size();
+		arr = (E[])(new Comparable[existing.cap]);
+		for(int i = 0; i < size; i++)
+		{
+      arr[i] = existing.arr[i];
+		}
+	}
+	/**
+	* This is the private constructor that is used for the sort() method
+	*
+	* @param a
+	**/
+	private Heap12(E[] a)
+	{
+		size = 0;
+		arr = a;
+	}
+	/**
+	* This is the add() method that adds the passed element to the end of the
+	* heap and bubble up if necessary to make it a valid heap
+	*
+	* @param e
+	**/
+	public void add(E e)
+	{
+		if(size >= cap)
+		{
+			cap = 2*arr.length;
+			// Creates an array with double the capacity of the original array
+			E[] arr2 = (E[])(new Comparable[cap]);
+			for(int i = 0; i < arr.length; i++)
+			{
+				arr2[i] = arr[i];
+			}
+			arr = arr2;
+		}
+		else if(e == null)
+			throw new NullPointerException();
+		arr[size] = e;
+		size++;
+		bubbleUp(size - 1);
+	}
+	/**
+	* This is the equals() method that compares 2 heaps and determines if
+	* they are equal.
+	*
+	* @param o
+	* @return boolean
+	**/
+	public boolean equals(java.lang.Object o)
+	{
+		if(o instanceof Heap12)	// Checks if the object is of the same type
+		{
+			Heap12<E> o2 = (Heap12<E>)(o);
+			if(o2.size() != this.size)
+				return false;
+			else if(o2.size() == 0)
+				return true;
+			for(int i = 0; i < this.size(); i++)
+			{
+				if(arr[i] != o2.arr[i])
+					return false;
+			}
+			return true;
+		}
+		else
+			return false;
+	}
+	/**
+	* This is the hashCode() method which returns the hash code of the object
+	*
+	* @return int
+	**/
+	public int hashCode()
+	{
+		int hashCode = 1;
+		for(E e : arr)
+			hashCode = 31*hashCode + e.hashCode();
+		return hashCode;
+	}
+	/**
+	* This is the isEmpty() method that checks if the heap is empty
+	*
+	* @return boolean
+	**/
+	public boolean isEmpty()
+	{
+		if(size == 0)
+			return true;
+		return false;
+	}
+	/**
+	* This is the peek() method that returns the element that is next to be
+	* removed
+	*
+	* @return E
+	**/
+	public E peek()
+	{
+		if(size == 0)
+			return null;
+		E e = arr[0];
+		return e;
+	}
+	/**
+	* This is the remove() method that removes the root of the heap
+	*
+	* @return E
+	**/
+	public E remove()
+	{
+		if(size == 0)
+			return null;
+		E e = arr[0];
+		arr[0] = arr[size - 1];
+		size--;
+		trickleDown(0);
+		return e;
+	}
+	/**
+	* This is the size() method that returns the amount of elements the heap
+	* contains
+	*
+	* @return int
+	**/
+	public int size()
+	{
+		return size;
+	}
+	/**
+	* This is the sort() method that sorts a passed array using heap sort in
+	* non-decreasing order
+	*
+	* @param a
+	**/
+	public static <T extends java.lang.Comparable<? super T>> void sort(T[] a)
+	{
+		if(a == null)
+			throw new NullPointerException();
+		Heap12<T> h = new Heap12<T>(a);
+		for(int i = 0; i < a.length; i++)
+			h.add(a[i]);
+		for(int i = a.length - 1; i >= 0; i--)
+			a[i] = h.remove();
+	}
+	/**
+	* This is the trickleDown() method that is used when the root is removed and
+	* the last element that is placed at the root will not always be a valid heap
+	* so therefore need to swap with the appropriate child
+	*
+	* @param i
+	**/
+	private void trickleDown(int i)
+	{
+		int Max = i;
+		if(((2*i + 1) <= (size - 1)) && (arr[Max].compareTo(arr[2*i + 1]) < 0))
+			Max = 2*i + 1;
+		if(((2*i + 2) <= (size - 1)) && (arr[Max].compareTo(arr[2*i + 2]) < 0))
+			Max = 2*i + 2;
+		if(Max != i)
+		{
+			E tmp = arr[i];
+			arr[i] = arr[Max];
+			arr[Max] = tmp;
+			trickleDown(Max);
+		}
+		/*if((2*i + 2) > size)
+			return;
+		// If size is even implies that there is no right child	at the end
+		if((size % 2 == 0) && ((2*i + 1) == (size - 1)))
+		{
+			if(arr[i].compareTo(arr[2*i + 1]) < 0)
+				{
+					E tmp = arr[i];
+					arr[i] = arr[2*i + 1];
+					arr[2*i + 1] = tmp;
+				}
+				trickleDown(2*i + 1);	
+		}
+		else if(arr[2*i + 1].compareTo(arr[2*i + 2]) < 0)
+		{
+			if(arr[i].compareTo(arr[2*i + 2]) < 0)
+			{
+				E tmp = arr[i];
+				arr[i] = arr[2*i + 2];
+				arr[2*i + 2] = tmp;
+			}
+			trickleDown(2*i + 2);
+		}
+		else if(arr[2*i + 1].compareTo(arr[2*i + 2]) > 0)
+		{
+			if(arr[i].compareTo(arr[2*i + 1]) < 0)
+			{
+				E tmp = arr[i];
+				arr[i] = arr[2*i + 1];
+				arr[2*i + 1] = tmp;
+			}
+			trickleDown(2*i + 1);
+		}*/
+	}
+	/**
+	* This is the bubbleUp() methed that is used when an element is added to the
+	* end and makes it an invalid heap so it needs to compare with it's parent
+	* node to make appropriate swaps to make it a valid heap
+	*
+	* @param i
+	**/
+	private void bubbleUp(int i)
+	{
+		if(i == 0)
+			return;
+		else if (arr[i].compareTo(arr[(i - 1)/2]) < 0)
+			return;
+		E tmp = arr[i];
+		arr[i] = arr[(i - 1)/2];
+		arr[(i - 1)/2] = tmp;
+		bubbleUp((i - 1)/2);
+	}
+}

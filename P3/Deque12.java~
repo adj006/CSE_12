@@ -1,0 +1,189 @@
+/**
+* @author Adrian Jimenez login name: cs12scx PID: A10748304
+* @version 5/1/13
+*
+* Assignment #: 3
+**/
+
+/**
+* This assignment Implements the BoundedDeque<E> interface in order to use
+* the methods it contains
+**/
+
+import java.util.*;
+
+public class Deque12<E> implements BoundedDeque<E>
+{
+	// The amount of data elements it is currently holding
+	protected int size;
+	protected int cap; // The maximum amount of data elements it can hold
+	protected int front;	// Index for the front of the queue
+	protected int back;	// Index for the back of the queue
+	protected E[] arr;	// Circular array to store the values
+	/**
+	* This is the Deque12 constructor that takes in the capacity
+	*
+	* @param c
+	**/
+	public Deque12(int c)
+	{
+		if(c < 1)
+			throw new IllegalArgumentException();
+		arr = ((E[])new Object[c]);
+		size = 0;
+		cap = c;
+		front = 0;
+		back = 0;
+	}
+	/**
+	* The addBack(E e) method that adds the specified element to the back of
+	* the array without allowing it to add more than it can hold and cannot
+	* add a null element
+	*
+	* @param e
+	* @return boolean
+	**/
+	public boolean addBack(E e)
+	{
+		if(size >= cap)
+			return false;
+		else if(e == null)
+			throw new NullPointerException();
+		else
+		{
+			arr[back] = e;
+			back = ((back + 1) % cap);	// wraps around making it a circular array
+			size++;
+			return true;
+		}
+	}
+	/**
+	* The addFront(E e) method that adds the specified element to the front of
+	* the array without allowing it to add more than it can hold and cannot
+	* add a null element
+	*
+	* @param e
+	* @return boolean
+	**/
+	public boolean addFront(E e)
+	{
+		if(size >= cap)
+			return false;
+		else if(e == null)
+			throw new NullPointerException();
+		else
+		{
+			// wraps around making it a circular array
+			front = ((front - 1 + cap) % cap);
+			arr[front] = e;
+			size++;
+			return true;
+		}
+	}
+	/**
+	* This is the capacity() method which it returns the capacity of the array
+	*
+	* @return int
+	**/
+	public int capacity()
+	{
+		return cap;
+	}
+	/**
+	* This is the equals method which compares 2 objects to see if they are equal
+	*
+	* @param o
+	* @return boolean
+	**/
+	public boolean equals(java.lang.Object o)
+	{
+		if(o instanceof Deque12)	// Checks if the object is of the same type
+		{
+			Deque12<E> o2 = (Deque12<E>)(o);
+			if(o2.size() != this.size)
+				return false;
+			else if(o2.size() == 0)
+				return true;
+			E e;
+			for(int i = 0; i < this.size(); i++)
+			{
+				e = o2.removeFront();
+				if(arr[front] == e)
+				{
+					o2.addBack(e);
+					front = ((front + 1) % cap);
+				}
+				else
+					return false;
+			}
+			return true;
+		}
+		else
+			return false;
+	}
+	/**
+	* This is the peekBack() method that returns the element at the back of the
+	* array
+	*
+	* @return E
+	**/
+	public E peekBack()
+	{
+		if(size == 0)
+			return null;
+		return arr[(back - 1 + cap) % cap];
+	}
+	/**
+	* This is the peekFront() method that returns the element at the front of the
+	* array
+	*
+	* @return E
+	**/
+	public E peekFront()
+	{
+		if(size == 0)
+			return null;
+		return arr[front];
+	}
+	/**
+	* This is the removeBack() method that removes and returns the element
+	* at the back of the array
+	*
+	* @ return E
+	**/
+	public E removeBack()
+	{
+		if(size == 0)
+			return null;
+		E e = arr[(back - 1 + cap) % cap];
+		// wraps around making it a circular array
+		back = ((back - 1 + cap) % cap);
+		size--;
+		return e;
+	}
+	/**
+	* This is the removeFront() method that removes and returns the element
+	* at the front of the array
+	*
+	* @ return E
+	**/
+	public E removeFront()
+	{
+		if(size == 0)
+			return null;
+		E e = arr[front];
+		// wraps around making it a circular array
+		front = ((front + 1) % cap);
+		size--;
+		return e;
+	}
+	/**
+	* This is the size method that returns the size of the array
+	*
+	* @return int
+	**/
+	public int size()
+	{
+		return size;
+	}
+}
